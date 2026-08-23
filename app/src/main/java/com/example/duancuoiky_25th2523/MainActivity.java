@@ -132,9 +132,26 @@ public class MainActivity extends AppCompatActivity {
                 final int r = i;
                 final int c = j;
 
+                // Sự kiện click bình thường (đã có từ trước)
                 btn.setOnClickListener(v -> {
-                    // Khi click vào, chỉ cần gọi hàm đệ quy truyền vào tọa độ r, c
                     revealCell(r, c);
+                });
+
+                // THÊM MỚI: Sự kiện nhấn giữ để cắm cờ 🚩
+                btn.setOnLongClickListener(v -> {
+                    // Nếu game đã kết thúc hoặc ô đã bị lật thì bỏ qua
+                    if (isGameOver || isRevealed[r][c]) return true;
+
+                    if (isFlagged[r][c]) {
+                        // Nếu đã cắm cờ rồi -> Rút cờ ra
+                        isFlagged[r][c] = false;
+                        btn.setText("");
+                    } else {
+                        // Nếu chưa cắm cờ -> Cắm cờ vào
+                        isFlagged[r][c] = true;
+                        btn.setText("🚩");
+                    }
+                    return true; // Trả về true để hệ thống biết đã xử lý xong Long Click
                 });
 
                 buttons[i][j] = btn;
