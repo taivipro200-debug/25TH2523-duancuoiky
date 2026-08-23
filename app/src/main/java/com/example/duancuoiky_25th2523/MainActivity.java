@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
+    private boolean[][] isRevealed = new boolean[ROWS][COLS]; // Lưu trạng thái đã lật hay chưa
     private void calculateNumbers() {
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLS; c++) {
