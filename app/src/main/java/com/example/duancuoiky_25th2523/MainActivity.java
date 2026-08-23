@@ -71,40 +71,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void revealCell(int r, int c) {
-        // Điều kiện dừng: Vượt ra ngoài bản đồ hoặc ô này đã được mở rồi
-        if (r < 0 || r >= ROWS || c < 0 || c >= COLS || isRevealed[r][c]) {
+        // Điều kiện dừng mới: Game over, hoặc ô đó đã cắm cờ, đã lật, hoặc tràn viền
+        if (isGameOver || r < 0 || r >= ROWS || c < 0 || c >= COLS || isRevealed[r][c] || isFlagged[r][c]) {
             return;
         }
 
-        // Đánh dấu là đã mở
         isRevealed[r][c] = true;
         Button btn = buttons[r][c];
 
-        // Nếu là mìn thì hiện bom (Thua)
+        // TRƯỜNG HỢP 1: ĐẠP TRÚNG MÌN -> THUA CUỘC
         if (board[r][c] == -1) {
             btn.setText("💣");
-            btn.setBackgroundColor(0xFFFFCCCC);
+            btn.setBackgroundColor(0xFFFFCCCC); // Nền đỏ
+            isGameOver = true;
+
+            // Đổi dòng chữ trạng thái trên cùng
+            android.widget.TextView tvStatus = findViewById(R.id.tvStatus);
+            tvStatus.setText("Trạng thái: BẠN ĐÃ THUA! 💥");
             return;
         }
 
-        // Nếu là số > 0 thì hiện số và DỪNG LOANG
+        // TRƯỜNG HỢP 2: Ô AN TOÀN
+        revealedSafeCells++; // Tăng biến đếm ô an toàn lên 1
+
         if (board[r][c] > 0) {
             btn.setText(String.valueOf(board[r][c]));
             btn.setBackgroundColor(0xFFEEEEEE);
-            return;
-        }
-
-        // Nếu là ô trống (số 0): Hiện nền xám và TIẾP TỤC LOANG ra 8 ô xung quanh
-        btn.setText("");
-        btn.setBackgroundColor(0xFFCCCCCC);
-
-        // Gọi đệ quy cho 8 ô lân cận
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i != 0 || j != 0) {
-                    revealCell(r + i, c + j);
+        } else {
+            btn.setText("");
+            btn.setBackgroundColor(0xFFCCCCCC);
+            // Loang ra 8 ô xung quanh
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    if (i != 0 || j != 0) {
+                        revealCell(r + i, c + j);
+                    }
                 }
             }
+        }
+
+        // KIỂM TRA ĐIỀU KIỆN THẮNG: Đã mở hết các ô không phải mìn
+        if (revealedSafeCells == (ROWS * COLS) - NUM_MINES) {
+            isGameOver = true;
+            android.widget.TextView tvStatus = findViewById(R.id.tvStatus);
+            tvStatus.setText("Trạng thái: BẠN ĐÃ CHIẾN THẮNG! 🏆");
         }
     }
     private void initBoardUI() {
