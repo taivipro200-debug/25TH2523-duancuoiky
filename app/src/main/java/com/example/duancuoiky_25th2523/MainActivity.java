@@ -120,16 +120,8 @@ public class MainActivity extends AppCompatActivity {
                 final int c = j;
 
                 btn.setOnClickListener(v -> {
-                    if (board[r][c] == -1) {
-                        btn.setText("💣");
-                        btn.setBackgroundColor(0xFFFFCCCC); // Nền đỏ
-                    } else if (board[r][c] > 0) {
-                        btn.setText(String.valueOf(board[r][c]));
-                        btn.setBackgroundColor(0xFFEEEEEE); // Nền trắng xám
-                    } else {
-                        btn.setText(""); // Ô trống
-                        btn.setBackgroundColor(0xFFCCCCCC); // Nền xám đậm hơn
-                    }
+                    // Khi click vào, chỉ cần gọi hàm đệ quy truyền vào tọa độ r, c
+                    revealCell(r, c);
                 });
 
                 buttons[i][j] = btn;
