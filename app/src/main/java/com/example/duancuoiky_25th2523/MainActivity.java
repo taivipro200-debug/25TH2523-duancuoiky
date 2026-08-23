@@ -1,5 +1,4 @@
-package com.example.minesweeper; // Đảm bảo giữ đúng tên package của bạn
-
+package com.example.duancuoiky_25th2523;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -13,7 +12,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Mảng 2 chiều để lưu trữ giao diện của 64 ô
     private Button[][] buttons = new Button[ROWS][COLS];
-
+    // ... các khai báo cũ (ROWS, COLS, buttons)
+    private int[][] board = new int[ROWS][COLS]; // Mảng lưu trạng thái logic
+    private final int NUM_MINES = 10; // Đặt 10 quả mìn cho bàn 8x8
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +22,27 @@ public class MainActivity extends AppCompatActivity {
 
         gridLayout = findViewById(R.id.gridLayout);
         initBoardUI();
+    }
+    private void placeMines() {
+        // Khởi tạo mảng toàn số 0 (trống)
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                board[i][j] = 0;
+            }
+        }
+
+        // Rải mìn ngẫu nhiên
+        int minesPlaced = 0;
+        while (minesPlaced < NUM_MINES) {
+            int r = (int) (Math.random() * ROWS);
+            int c = (int) (Math.random() * COLS);
+
+            // Nếu ô này chưa có mìn thì mới đặt
+            if (board[r][c] != -1) {
+                board[r][c] = -1;
+                minesPlaced++;
+            }
+        }
     }
 
     private void initBoardUI() {
