@@ -15,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
     private int[][] board = new int[ROWS][COLS];
     private Button[][] buttons = new Button[ROWS][COLS];
     private final int NUM_MINES = 10;
+    private boolean[][] isFlagged = new boolean[ROWS][COLS]; // Lưu trạng thái cắm cờ
+    private boolean isGameOver = false; // Kiểm tra game đã kết thúc chưa
+    private int revealedSafeCells = 0;  // Đếm số ô an toàn đã mở để xét điều kiện thắng
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
